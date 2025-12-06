@@ -1,79 +1,95 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaArrowRight } from 'react-icons/fa6';
-import { Link } from 'react-router';
+import React, { use } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-const BannerSection = () => {
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/effect-fade";
+import "swiper/css/autoplay";
+
+import { Navigation, EffectFade, Autoplay } from "swiper/modules";
+
+const promiseData = fetch("/bannerData.json").then((res) => res.json());
+
+export default function BannerSlider() {
+  const data = use(promiseData);
+
   return (
-    <section className="relative h-screen bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 overflow-hidden flex items-center">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <img
-          src="https://aggregate-amethyst-glspnldplv.edgeone.app/close-up-bottle-filled-coins.jpg"
-          alt="coins background"
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/70 via-blue-800/70 to-purple-900/70"></div>
-      </div>
-
-      {/* Floating decorative shapes */}
-      <motion.div
-        animate={{ y: [0, 20, 0] }}
-        transition={{ repeat: Infinity, duration: 6 }}
-        className="absolute top-20 left-10 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl"
-      />
-      <motion.div
-        animate={{ y: [0, -15, 0] }}
-        transition={{ repeat: Infinity, duration: 8 }}
-        className="absolute bottom-32 right-20 w-60 h-60 bg-cyan-400/20 rounded-full blur-3xl"
-      />
-      <motion.div
-        animate={{ x: [0, 15, 0] }}
-        transition={{ repeat: Infinity, duration: 10 }}
-        className="absolute top-1/2 left-1/2 w-72 h-72 bg-purple-400/10 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2"
-      />
-
-      {/* Content Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="relative z-10 max-w-3xl mx-auto text-center p-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-[0_0_50px_rgba(255,255,255,0.1)]"
+    <div className="w-full h-[450px] md:h-[520px] rounded-xl overflow-hidden shadow-2xl">
+      <Swiper
+        navigation
+        effect="fade"
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        modules={[Navigation, EffectFade, Autoplay]}
+        className="h-full"
       >
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-4xl md:text-6xl font-extrabold  leading-tight"
-        >
-          FinEase – <br />
-          Simplify Your Finances, Empower Your Future
-        </motion.h1>
+        {data.map((item) => (
+          <SwiperSlide key={item.id}>
+            <div className="relative h-full w-full group">
+              {/* Background Image */}
+              <img
+                src="https://deep-violet-p3vvsful2o-35otwgof6d.edgeone.dev/coolbackgrounds-particles-stellar.png"
+                alt={item.title}
+                className="h-full w-full object-cover scale-110 group-hover:scale-125 transition-all duration-[2500ms] ease-[cubic-bezier(.19,1,.22,1)]"
+              />
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className=" mt-6 text-lg md:text-xl"
-        >
-          Take control of your money, track your goals, and achieve financial freedom with ease.
-        </motion.p>
+              {/* Dark Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/10"></div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="mt-10 flex justify-center"
-        >
-          <Link to="/AddTransaction">
-            <button className="flex items-center gap-3 bg-white text-indigo-700 font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-gray-100 transition transform hover:scale-105">
-              Get Started <FaArrowRight />
-            </button>
-          </Link>
-        </motion.div>
-      </motion.div>
-    </section>
+              {/* Floating Glassmorphism Card */}
+            
+              <div
+                className="absolute left-10 top-1/2 -translate-y-1/2 max-w-lg p-7
+    bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-3xl
+    transform transition-all duration-700"
+              >
+                {/* BOOK IMAGE ON TOP (fixed, no hover movement) */}
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-28 h-40 object-cover rounded-xl mb-5 shadow-2xl border border-white/20"
+                />
+
+                {/* TITLE */}
+                <h2
+                  className="text-4xl md:text-5xl font-extrabold mb-4
+      bg-gradient-to-r from-purple-300 via-pink-300 to-indigo-300 
+      animate-gradient-move 
+      text-transparent bg-clip-text drop-shadow-2xl"
+                >
+                  {item.title}
+                </h2>
+
+                {/* DESCRIPTION */}
+                <p className="text-lg text-gray-200 mb-6 leading-relaxed drop-shadow-xl">
+                  {item.description}
+                </p>
+
+                {/* BUTTON */}
+                <a
+                  href="/all-books"
+                  className="relative px-7 py-3 rounded-xl font-semibold text-white 
+      bg-gradient-to-r from-purple-600 to-pink-600 shadow-xl 
+      overflow-hidden transition-all duration-300 hover:scale-105"
+                >
+                  <span className="relative z-10">View All Books</span>
+                  <span
+                    className="absolute top-0 left-0 w-full h-full bg-white/20 
+      translate-x-[-100%] hover:translate-x-[200%] 
+      transition-transform duration-[700ms] rotate-[20deg]"
+                  ></span>
+                </a>
+              </div>
+
+              {/* Parallax Soft Light Effect */}
+              <div
+                className="absolute top-0 left-0 w-full h-full pointer-events-none 
+                bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-20 
+                transition-all duration-700"
+              ></div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
-};
-
-export default BannerSection;
+}

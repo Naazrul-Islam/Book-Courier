@@ -1,32 +1,21 @@
 [
   {
     "id": 1,
-    "title": "The Art of Coding",
+    "title": "Annual Report",
     "description": "Explore the fundamentals of clean code, architecture, and modern development patterns.",
-    "image": "https://i.ibb.co/1rWQpYc/book1.jpg"
+    "image": "https://definite-cyan-zjwcnmaosq-yh0gv87mn7.edgeone.dev/Green%20Gradient%20Geometric%20Hexagon%20Annual%20Report%20Cover.jpg"
   },
   {
     "id": 2,
-    "title": "Deep Dive into JavaScript",
+    "title": "From Concept to Creation",
     "description": "Master JavaScript concepts with real-world examples and advanced techniques.",
-    "image": "https://i.ibb.co/zZ2T1cZ/book2.jpg"
+    "image": "https://i.ibb.co.com/Q7YVkd3F/Blue-and-White-Simple-Business-Plan-Book-Cover-1.jpg"
   },
   {
     "id": 3,
-    "title": "React for Professionals",
+    "title": "Strategies for Business Marketing.",
     "description": "Learn advanced React patterns, hooks, and architecture for scalable applications.",
-    "image": "https://i.ibb.co/qdKXKxn/book3.jpg"
-  },
-  {
-    "id": 4,
-    "title": "Node.js Backend Mastery",
-    "description": "Understand server-side development with Express, databases, JWT, and more.",
-    "image": "https://i.ibb.co/n6dChXs/book4.jpg"
-  },
-  {
-    "id": 5,
-    "title": "Next.js Fullstack Guide",
-    "description": "Build modern fullstack apps with App Router, APIs, Authentication & Deployment.",
-    "image": "https://i.ibb.co/7QqLvqn/book5.jpg"
+    "image": "https://i.ibb.co.com/BHNNJbF2/Blue-Business-Marketing-Book-Cover.png"
   }
+  
 ]
