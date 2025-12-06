@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "The Art of Coding",
+    "description": "Explore the fundamentals of clean code, architecture, and modern development patterns.",
+    "image": "https://i.ibb.co/1rWQpYc/book1.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Deep Dive into JavaScript",
+    "description": "Master JavaScript concepts with real-world examples and advanced techniques.",
+    "image": "https://i.ibb.co/zZ2T1cZ/book2.jpg"
+  },
+  {
+    "id": 3,
+    "title": "React for Professionals",
+    "description": "Learn advanced React patterns, hooks, and architecture for scalable applications.",
+    "image": "https://i.ibb.co/qdKXKxn/book3.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Node.js Backend Mastery",
+    "description": "Understand server-side development with Express, databases, JWT, and more.",
+    "image": "https://i.ibb.co/n6dChXs/book4.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Next.js Fullstack Guide",
+    "description": "Build modern fullstack apps with App Router, APIs, Authentication & Deployment.",
+    "image": "https://i.ibb.co/7QqLvqn/book5.jpg"
+  }
+]

@@ -58,14 +58,12 @@ const Navber = () => {
               <NavLink to={"/"}>Home</NavLink>
             </li>
             <li>
-              <NavLink to={"/AddTransaction"}>Add Transaction</NavLink>
+              <NavLink to={"/AddTransaction"}>Books</NavLink>
             </li>
             <li>
-              <NavLink to={"/MyTransactions"}>My Transactions</NavLink>
+              <NavLink to={"/MyTransactions"}>Dashboard</NavLink>
             </li>
-            <li>
-              <NavLink to={"/Reports"}>Reports</NavLink>
-            </li>
+           
           </ul>
         </div>
 
@@ -74,7 +72,7 @@ const Navber = () => {
           className="btn btn-ghost text-2xl flex items-center gap-2 font-bold"
         >
           <MdManageAccounts className="text-3xl text-purple-300" />
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">FinEase</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">BookCourier</h1>
         </Link>
       </div>
 
@@ -85,14 +83,12 @@ const Navber = () => {
             <NavLink to={"/"}>Home</NavLink>
           </li>
           <li>
-            <NavLink to={"/AddTransaction"}>Add Transaction</NavLink>
+            <NavLink to={"/AddTransaction"}>Books</NavLink>
           </li>
           <li>
-            <NavLink to={"/MyTransactions"}>My Transactions</NavLink>
+            <NavLink to={"/MyTransactions"}>Dashboard</NavLink>
           </li>
-          <li>
-            <NavLink to={"/Reports"}>Reports</NavLink>
-          </li>
+          
         </ul>
       </div>
 
@@ -148,9 +144,9 @@ const Navber = () => {
             <Link to={"/auth"} className="btn btn-primary">
               SignIn
             </Link>
-            <Link to={"/auth/register"} className="btn btn-primary">
+            {/* <Link to={"/auth/register"} className="btn btn-primary">
               Signup
-            </Link>
+            </Link> */}
           </div>
         )}
       </div>
