@@ -12,6 +12,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { app } from "../firebaseConfig";
+import { Auth } from "./AuthContext";
 
 
 const provider = new GoogleAuthProvider();
@@ -72,7 +73,7 @@ const AuthProvider = ({ children }) => {
     googleSignIn,
     ForgetPassword
   };
-  return <AuthContext value={authData}>{children}</AuthContext>;
+  return <Auth value={authData}>{children}</Auth>;
 };
 
 export default AuthProvider;
