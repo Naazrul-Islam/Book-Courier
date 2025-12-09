@@ -5,13 +5,13 @@ import Swal from "sweetalert2";
 import { Auth } from "../auth/AuthContext";
 
 const MyProfile = () => {
-  const { user } = useContext(Auth);
+  const { user, updateUser } = useContext(Auth);
   const [name, setName] = useState(user?.displayName || "");
   const [photo, setPhoto] = useState(user?.photoURL || "");
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    await user?.updateProfile({ displayName: name, photoURL: photo });
+    await updateUser({ displayName: name, photoURL: photo });
     Swal.fire({
       icon: "success",
       title: "Profile Updated!",

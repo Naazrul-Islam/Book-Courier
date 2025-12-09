@@ -86,7 +86,7 @@ const Navber = () => {
             <NavLink to={"/AddTransaction"}>Books</NavLink>
           </li>
           <li>
-            <NavLink to={"/MyTransactions"}>Dashboard</NavLink>
+            <NavLink to={"/dashboard"}>Dashboard</NavLink>
           </li>
           
         </ul>
