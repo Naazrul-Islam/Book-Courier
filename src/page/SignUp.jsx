@@ -16,29 +16,63 @@ const SignUp = () => {
   const { createUser, googleSignIn } = use(Auth);
   const location = useLocation();
   const navigate = useNavigate();
-  const handleGoogle = async () => {
+const handleGoogle = async () => {
   try {
     const result = await googleSignIn();
     const email = result.user.email;
+    const name = result.user.displayName;
+    const photo = result.user.photoURL;
 
-    const response = await fetch(`http://localhost:3000/user-role/${email}`);
-    const roleData = await response.json();
-    const userRole = roleData?.role?.toLowerCase();
+    // 🔹 ফেচ করে দেখো ইউজার আগে আছে কি না
+    let response = await fetch(`http://localhost:3000/user-role/${email}`);
+    let roleData = await response.json();
 
-    switch (userRole) {
-      case "admin":
-        navigate("/dashboard/admin");
-        break;
-      case "librarian":
-        navigate("/dashboard/librarian");
-        break;
-      default:
-        navigate("/dashboard");
+    let userRole = roleData?.role?.toLowerCase();
+
+    // 🔹 যদি ইউজার নতুন হয়, ডিফল্ট রোল 'user' হিসেবে সেট করো
+    if (!userRole) {
+      userRole = "user"; // default role
+
+      // নতুন ইউজারের রোল ডাটাবেসে পোস্ট করা
+      await fetch("http://localhost:3000/user-role", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          role: "User", // ucfirst রাখলে nicer
+        }),
+      });
+
+      // users collection এ ইউজারের info রাখো
+      await fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          name: name,
+          photo: photo,
+          role: "User",
+        }),
+      });
     }
+
+    // 🔹 নেভিগেশন
+    navigate("/");
+    // switch (userRole) {
+    //   case "admin":
+    //     navigate("/dashboard/admin");
+    //     break;
+    //   case "librarian":
+    //     navigate("/dashboard/librarian");
+    //     break;
+    //   default:
+    //     navigate("/dashboard");
+    // }
   } catch (error) {
     toast.error(error.message);
   }
 };
+
 
 
   const handleShowPassword = (e) => {
