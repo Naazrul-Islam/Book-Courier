@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaUser, FaBook, FaClipboardList } from "react-icons/fa";
 import AddBook from "./AddBook";
 import MyBooks from "./MyBooks";
+import LibrarianOrders from "./LibrarianOrders";
 
 const LibrarianDashboard = () => {
   const [activeTab, setActiveTab] = useState("My Orders");
@@ -55,9 +56,7 @@ const LibrarianDashboard = () => {
           )}
           {activeTab === "Orders" && (
             <div>
-              <h2 className="text-2xl font-bold text-blue-600">Orders</h2>
-              <p className="mt-2 text-gray-700">View your order history.</p>
-              {/* Add Invoice Table / Cards here */}
+              <LibrarianOrders></LibrarianOrders>
             </div>
           )}
         </div>

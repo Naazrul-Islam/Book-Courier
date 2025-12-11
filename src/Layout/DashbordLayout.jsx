@@ -1,12 +1,22 @@
-import React from 'react';
-import Navber from '../components/Navber';
-import { NavLink, Outlet, useLocation } from 'react-router';
+import React, { useContext, useEffect } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import Navber from "../components/Navber";
+import { Auth } from "../auth/AuthContext";
 
-const DashbordLayout = () => {
-  const location = useLocation();
+const DashboardLayout = () => {
+  const { role, loading } = useContext(Auth);
+  const navigate = useNavigate();
 
-  // determine which tab is active
-  const current = location.pathname;
+  // Auto redirect based on role
+  useEffect(() => {
+    if (!loading) {
+      if (role === "admin") navigate("/dashboard/admin");
+      else if (role === "librarian") navigate("/dashboard/librarian");
+      else navigate("/dashboard"); // default user
+    }
+  }, [role, loading, navigate]);
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
     <div>
@@ -14,41 +24,33 @@ const DashbordLayout = () => {
 
       <div className="flex justify-center mt-5">
         <div className="tabs tabs-boxed">
-          {/* USER TAB */}
-          <NavLink to="/dashboard">
-            <input
-              type="radio"
-              name="dashboard-tabs"
-              className="tab"
-              aria-label="User Dashboard"
-              checked={current === "/dashboard"}
-              readOnly
-            />
+          {/* User Tab */}
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}
+          >
+            User
           </NavLink>
 
-          {/* LIBRARIAN TAB */}
-          <NavLink to="/dashboard/librarian">
-            <input
-              type="radio"
-              name="dashboard-tabs"
-              className="tab"
-              aria-label="Librarian Dashboard"
-              checked={current === "/dashboard/librarian"}
-              readOnly
-            />
-          </NavLink>
+          {/* Librarian Tab */}
+          {(role === "librarian" || role === "admin") && (
+            <NavLink
+              to="/dashboard/librarian"
+              className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}
+            >
+              Librarian
+            </NavLink>
+          )}
 
-          {/* ADMIN TAB */}
-          <NavLink to="/dashboard/admin">
-            <input
-              type="radio"
-              name="dashboard-tabs"
-              className="tab"
-              aria-label="Admin Dashboard"
-              checked={current === "/dashboard/admin"}
-              readOnly
-            />
-          </NavLink>
+          {/* Admin Tab */}
+          {role === "admin" && (
+            <NavLink
+              to="/dashboard/admin"
+              className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}
+            >
+              Admin
+            </NavLink>
+          )}
         </div>
       </div>
 
@@ -57,4 +59,4 @@ const DashbordLayout = () => {
   );
 };
 
-export default DashbordLayout;
+export default DashboardLayout;

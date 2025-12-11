@@ -8,25 +8,38 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { Auth } from "../auth/AuthContext";
 
-
 const SignUp = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState(""); // store role from select
   const { createUser, googleSignIn } = use(Auth);
   const location = useLocation();
   const navigate = useNavigate();
-  const handleGoogle = () => {
-    googleSignIn()
-      .then((result) => {
-        const user = result.user;
-        // console.log(user);
-        navigate(`${location.state ? location.state : "/"}`);
-      })
-      .catch((error) => {
-        // console.error(error);
-      });
-  };
+  const handleGoogle = async () => {
+  try {
+    const result = await googleSignIn();
+    const email = result.user.email;
+
+    const response = await fetch(`http://localhost:3000/user-role/${email}`);
+    const roleData = await response.json();
+    const userRole = roleData?.role?.toLowerCase();
+
+    switch (userRole) {
+      case "admin":
+        navigate("/dashboard/admin");
+        break;
+      case "librarian":
+        navigate("/dashboard/librarian");
+        break;
+      default:
+        navigate("/dashboard");
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
 
   const handleShowPassword = (e) => {
     e.preventDefault();
@@ -42,6 +55,12 @@ const SignUp = () => {
     const name = form.name.value;
     const photo = form.photo.value;
     console.log(email, password, terms, name, photo);
+
+    if (!role) {
+      alert("Select a role");
+    }
+
+    console.log("Selected Role:", role);
 
     if (password.length < 6) {
       setError("password must be at least 6 characters");
@@ -62,120 +81,148 @@ const SignUp = () => {
     }
 
     createUser(email, password)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
-        // console.log(user);
+        console.log(user);
+
+        const res = await fetch("http://localhost:3000/user-role", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email,
+            role: role,
+          }),
+        });
+
+        console.log(res);
+
         form.reset();
+        setRole(""); // reset role state too
         setError("");
         setSuccess(true);
         toast.success("User Created Successfully");
         navigate(`${location.state ? location.state : "/"}`);
       })
       .catch((error) => {
-        // console.error(error);
+        console.error(error);
         setError(error.message);
         toast.error(error.message);
       });
   };
   return (
     <>
-      
-    <div className="hero bg-base-200 min-h-screen gap-10">
-      <div className="hero-content flex-col lg:flex-row-reverse mr-6">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Sign Up!</h1>
-          {/* <p className="py-6">Provident cupiditate voluptatem et in.</p> */}
-        </div>
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mr-10">
-          <div className="card-body ">
-            <form onSubmit={handleSubmit}>
-              <fieldset className="fieldset">
-                <label className="label">Email</label>
-                <input
-                  type="email"
-                  className="input"
-                  placeholder="Email"
-                  name="email"
-                  required
-                />
-                <label className="label">Name</label>
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="name"
-                  name="name"
-                  required
-                />
-                <label className="label">Photo</label>
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="photo url"
-                  name="photo"
-                  required
-                />
-                <label className="label">Password</label>
-                <div className="relative">
+      <div className="hero bg-base-200 min-h-screen gap-10">
+        <div className="hero-content flex-col lg:flex-row-reverse mr-6">
+          <div className="text-center lg:text-left">
+            <h1 className="text-5xl font-bold">Sign Up!</h1>
+            {/* <p className="py-6">Provident cupiditate voluptatem et in.</p> */}
+          </div>
+          <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mr-10">
+            <div className="card-body ">
+              <form onSubmit={handleSubmit}>
+                <fieldset className="fieldset">
+                  <label className="label">Email</label>
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type="email"
                     className="input"
-                    placeholder="Password"
-                    name="password"
+                    placeholder="Email"
+                    name="email"
                     required
                   />
-                  <button
-                    size={20}
-                    onClick={handleShowPassword}
-                    className="absolute right-7 top-1/2 transform -translate-y-1/2"
-                  >
-                    {showPassword ? <FaEye /> : <LuEyeClosed />}
-                  </button>
-                </div>
-
-                <div>
+                  <label className="label">Name</label>
                   <input
-                    type="checkbox"
-                    name="terms"
-                    className="checkbox checkbox-neutral"
+                    type="text"
+                    className="input"
+                    placeholder="name"
+                    name="name"
+                    required
                   />
-                  <label className="label">
-                    I agree to the{" "}
-                    <a className="link link-hover">terms and conditions</a>
-                  </label>
-                </div>
-                <button className="btn btn-neutral mt-4">Sign Up</button>
-                {error && <p className="text-red-600">{error}</p>}
-                {success && (
-                  <p className="text-green-600">User Created Successfully</p>
-                )}
-                <p>
-                  Already have an account?
-                  <Link
-                    to={"/auth"}
-                    className="link link-hover  text-green-600 ml-2"
-                  >
-                    Login
-                  </Link>
-                </p>
-                <div>
-                  <Link>
+                  <label className="label">Photo</label>
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder="photo url"
+                    name="photo"
+                    required
+                  />
+                  <label className="label">Password</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="input"
+                      placeholder="Password"
+                      name="password"
+                      required
+                    />
                     <button
-                      onClick={handleGoogle}
-                      className="btn btn-neutral w-full"
+                      size={20}
+                      onClick={handleShowPassword}
+                      className="absolute right-7 top-1/2 transform -translate-y-1/2"
                     >
-                      <FaGoogle />
-                      Sign In with Google
+                      {showPassword ? <FaEye /> : <LuEyeClosed />}
                     </button>
-                  </Link>
-                </div>
-                <ToastContainer></ToastContainer>
-              </fieldset>
-            </form>
+                  </div>
+                  <fieldset className="fieldset">
+                    <legend className="fieldset-legend">Role</legend>
+                    <select
+                      name="role"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      className="select"
+                    >
+                      <option value="" disabled>
+                        Role
+                      </option>
+                      <option value="User">User</option>
+                      <option value="Librarian">Librarian</option>
+                      <option value="Admin">Admin</option>
+                    </select>
+                    <span className="label">Optional</span>
+                  </fieldset>
+
+                  <div>
+                    <input
+                      type="checkbox"
+                      name="terms"
+                      className="checkbox checkbox-neutral"
+                    />
+                    <label className="label">
+                      I agree to the{" "}
+                      <a className="link link-hover">terms and conditions</a>
+                    </label>
+                  </div>
+                  <button className="btn btn-neutral mt-4">Sign Up</button>
+                  {error && <p className="text-red-600">{error}</p>}
+                  {success && (
+                    <p className="text-green-600">User Created Successfully</p>
+                  )}
+                  <p>
+                    Already have an account?
+                    <Link
+                      to={"/auth"}
+                      className="link link-hover  text-green-600 ml-2"
+                    >
+                      Login
+                    </Link>
+                  </p>
+                  <div>
+                    <Link>
+                      <button
+                        onClick={handleGoogle}
+                        className="btn btn-neutral w-full"
+                      >
+                        <FaGoogle />
+                        Sign In with Google
+                      </button>
+                    </Link>
+                  </div>
+                  <ToastContainer></ToastContainer>
+                </fieldset>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  
     </>
   );
 };

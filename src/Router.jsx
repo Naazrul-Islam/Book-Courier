@@ -1,66 +1,79 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout";
 import HomeLayout from "./Layout/HomeLayout";
+
 import LogIn from "./page/LogIn";
 import SignUp from "./page/SignUp";
 import MyProfile from "./page/MyProfile";
 import ForgetPassword from "./page/ForgetPassword";
-import DashboardLayout from "./Layout/DashbordLayout";
+
 import UserDashboard from "./components/UserDashboard";
-import LibrarianDashboard from "./components/LibrarianDashboard";
-import AdminDashboard from "./AdminDashboard";
+
 import EditBook from "./components/EditBook";
 
+import PrivateRoute from "./auth/PrivateRoute";
+import RoleRoute from "./auth/RoleRoute";
+import AdminDashboard from "./AdminDashboard";
+import DashboardLayout from "./Layout/DashbordLayout";
+import LibrarianDashboard from "./components/LibrarianDashboard";
+
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomeLayout></HomeLayout>,
-  },
+  // PUBLIC ROUTES
+  { path: "/", element: <HomeLayout /> },
   {
     path: "/auth",
-    element: <AuthLayout></AuthLayout>,
+    element: <AuthLayout />,
     children: [
-      {
-        path: "/auth",
-        element: <LogIn></LogIn>,
-      },
-      {
-        path: "/auth/register",
-        element: <SignUp></SignUp>,
-      },
-      {
-        path: "/auth/forget-password",
-        element: <ForgetPassword></ForgetPassword>,
-      }
-    ],
-  },
-  
-  {
-    path: "/dashboard",
-    element: <DashboardLayout></DashboardLayout>,
-    children: [
-      {
-        path: "/dashboard",
-        element: <UserDashboard></UserDashboard>,
-      },
-      {
-        path: "/dashboard/librarian",
-        element: <LibrarianDashboard></LibrarianDashboard>,
-      },
-      {
-        path: "/dashboard/admin",
-        element: <AdminDashboard></AdminDashboard>,
-      },
-      {
-        path: "/dashboard/librarian/edit-book/:id",
-        element: <EditBook></EditBook>,
-      },
+      { index: true, element: <LogIn /> },
+      { path: "register", element: <SignUp /> },
+      { path: "forget-password", element: <ForgetPassword /> },
     ],
   },
   {
     path: "/profile",
-    element: <MyProfile></MyProfile>
-  }
+    element: (
+      <PrivateRoute>
+        <MyProfile />
+      </PrivateRoute>
+    ),
+  },
+
+  // DASHBOARD ROUTES
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      { index: true, element: <UserDashboard /> }, // default user
+      {
+        path: "/dashboard/librarian",
+        element: (
+          <RoleRoute allow={["librarian", "admin"]}>
+            <LibrarianDashboard />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: "/dashboard/admin",
+        element: (
+          <RoleRoute allow={["admin"]}>
+            <AdminDashboard />
+          </RoleRoute>
+        ),
+      },
+      {
+        path: "librarian/edit-book/:id",
+        element: (
+          <RoleRoute allow={["librarian", "admin"]}>
+            <EditBook />
+          </RoleRoute>
+        ),
+      },
+    ],
+  },
 ]);
 
 export default router;
