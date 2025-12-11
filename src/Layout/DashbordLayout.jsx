@@ -12,7 +12,7 @@ const DashboardLayout = () => {
     if (!loading) {
       if (role === "admin") navigate("/dashboard/admin");
       else if (role === "librarian") navigate("/dashboard/librarian");
-      else navigate("/dashboard"); // default user
+      else navigate("/dashboard/User"); // default user
     }
   }, [role, loading, navigate]);
 
@@ -25,15 +25,17 @@ const DashboardLayout = () => {
       <div className="flex justify-center mt-5">
         <div className="tabs tabs-boxed">
           {/* User Tab */}
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}
-          >
-            User
-          </NavLink>
+          {(role === "user") && (
+            <NavLink
+              to="/dashboard/user"
+              className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}
+            >
+              User
+            </NavLink>
+          )}
 
           {/* Librarian Tab */}
-          {(role === "librarian" || role === "admin") && (
+          {(role === "librarian") && (
             <NavLink
               to="/dashboard/librarian"
               className={({ isActive }) => (isActive ? "tab tab-active" : "tab")}

@@ -11,8 +11,6 @@ import {
 import { app } from "../firebaseConfig";
 import { Auth } from "./AuthContext";
 
-
-
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 

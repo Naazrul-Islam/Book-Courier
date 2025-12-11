@@ -8,9 +8,7 @@ import MyProfile from "./page/MyProfile";
 import ForgetPassword from "./page/ForgetPassword";
 
 import UserDashboard from "./components/UserDashboard";
-
 import EditBook from "./components/EditBook";
-
 import PrivateRoute from "./auth/PrivateRoute";
 import RoleRoute from "./auth/RoleRoute";
 import AdminDashboard from "./AdminDashboard";
@@ -20,6 +18,7 @@ import LibrarianDashboard from "./components/LibrarianDashboard";
 const router = createBrowserRouter([
   // PUBLIC ROUTES
   { path: "/", element: <HomeLayout /> },
+
   {
     path: "/auth",
     element: <AuthLayout />,
@@ -29,6 +28,8 @@ const router = createBrowserRouter([
       { path: "forget-password", element: <ForgetPassword /> },
     ],
   },
+
+  // PROFILE
   {
     path: "/profile",
     element: (
@@ -47,23 +48,30 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      { index: true, element: <UserDashboard /> }, // default user
+      // DEFAULT USER DASHBOARD
+      { path: "User", element: <UserDashboard /> },
+
+      // LIBRARIAN DASHBOARD
       {
-        path: "/dashboard/librarian",
+        path: "librarian",
         element: (
           <RoleRoute allow={["librarian", "admin"]}>
             <LibrarianDashboard />
           </RoleRoute>
         ),
       },
+
+      // ADMIN DASHBOARD
       {
-        path: "/dashboard/admin",
+        path: "admin",
         element: (
           <RoleRoute allow={["admin"]}>
             <AdminDashboard />
           </RoleRoute>
         ),
       },
+
+      // EDIT BOOK – only librarian/admin
       {
         path: "librarian/edit-book/:id",
         element: (

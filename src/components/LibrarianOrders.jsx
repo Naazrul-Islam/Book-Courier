@@ -12,7 +12,7 @@ const LibrarianOrders = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`/api/orders?addedBy=${user.uid}`);
+      const res = await axios.get(`http://localhost:3000/orders?addedBy=${user.uid}`);
       setOrders(res.data);
     } catch (error) {
       console.error(error);

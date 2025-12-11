@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { FaUser, FaBook, FaClipboardList } from "react-icons/fa";
+import UsersManagement from "./components/UsersManagement";
+import ManageBooks from "./components/ManageBooks";
+import MyProfile from "./page/MyProfile";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("My Orders");
@@ -43,6 +46,7 @@ const AdminDashboard = () => {
               <h2 className="text-2xl font-bold text-purple-600">All Users</h2>
               <p className="mt-2 text-gray-700">Here are all the registered users.</p>
               {/* Add Table or Cards for Users here */}
+              <UsersManagement></UsersManagement>
             </div>
           )}
           {activeTab === "Manage Books" && (
@@ -50,6 +54,7 @@ const AdminDashboard = () => {
               <h2 className="text-2xl font-bold text-pink-600">Manage Books</h2>
               <p className="mt-2 text-gray-700">Update book information.</p>
               {/* Add Book Form / Modal here */}
+              <ManageBooks></ManageBooks>
             </div>
           )}
           {activeTab === "My Profile" && (
@@ -57,6 +62,7 @@ const AdminDashboard = () => {
               <h2 className="text-2xl font-bold text-blue-600">My Profile</h2>
               <p className="mt-2 text-gray-700">View and update your profile information.</p>
               {/* Add Profile Form / Modal here */}
+              <MyProfile></MyProfile>
             </div>
           )}
         </div>

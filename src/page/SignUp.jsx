@@ -81,33 +81,47 @@ const SignUp = () => {
     }
 
     createUser(email, password)
-      .then(async (result) => {
-        const user = result.user;
-        console.log(user);
+  .then(async (result) => {
+    const user = result.user;
 
-        const res = await fetch("http://localhost:3000/user-role", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email,
-            role: role,
-          }),
-        });
+    // 1️⃣ POST to /user-role
+    await fetch("http://localhost:3000/user-role", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        role: role,
+      }),
+    });
 
-        console.log(res);
+    // 2️⃣ POST to /users
+    await fetch("http://localhost:3000/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        name: name,
+        photo: photo,
+        role: role,
+      }),
+    });
 
-        form.reset();
-        setRole(""); // reset role state too
-        setError("");
-        setSuccess(true);
-        toast.success("User Created Successfully");
-        navigate(`${location.state ? location.state : "/"}`);
-      })
-      .catch((error) => {
-        console.error(error);
-        setError(error.message);
-        toast.error(error.message);
-      });
+    // Reset form & state
+    form.reset();
+    setRole("");
+    setError("");
+    setSuccess(true);
+    toast.success("User Created Successfully");
+
+    // Navigate
+    navigate(location.state ? location.state : "/");
+  })
+  .catch((error) => {
+    console.error(error);
+    setError(error.message);
+    toast.error(error.message);
+  });
+
   };
   return (
     <>
