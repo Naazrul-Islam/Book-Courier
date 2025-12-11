@@ -49,7 +49,7 @@ const Navber = () => {
             <NavLink to={"/"}>Home</NavLink>
           </li>
           <li>
-            <NavLink to={"/AddTransaction"}>Books</NavLink>
+            <NavLink to={"/books"}>Books</NavLink>
           </li>
 
           {/* Role-based Dashboard */}
