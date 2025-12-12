@@ -3,7 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-const AllBooks = () => {
+const LatestBooks = () => {
   const [books, setBooks] = useState([]);
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const AllBooks = () => {
             transition={{ delay: index * 0.1, type: "spring", stiffness: 120 }}
           >
             <img
-              src={book.coverImage}
+              src={book.image}
               alt={book.title}
               className="w-full h-60 object-cover hover:brightness-90 transition duration-300"
             />
@@ -61,4 +61,4 @@ const AllBooks = () => {
   );
 };
 
-export default AllBooks;
+export default LatestBooks;

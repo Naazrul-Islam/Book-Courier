@@ -14,7 +14,8 @@ import RoleRoute from "./auth/RoleRoute";
 import AdminDashboard from "./AdminDashboard";
 import DashboardLayout from "./Layout/DashbordLayout";
 import LibrarianDashboard from "./components/LibrarianDashboard";
-import AllBooks from "./components/LatestBooks";
+import AllBooks from "./components/AllBooks";
+
 
 const router = createBrowserRouter([
   // PUBLIC ROUTES

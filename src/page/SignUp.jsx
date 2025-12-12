@@ -12,7 +12,7 @@ const SignUp = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [role, setRole] = useState(""); // store role from select
+  const [role, setRole] = useState(""); 
   const { createUser, googleSignIn } = use(Auth);
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,27 +23,23 @@ const handleGoogle = async () => {
     const name = result.user.displayName;
     const photo = result.user.photoURL;
 
-    // 🔹 ফেচ করে দেখো ইউজার আগে আছে কি না
     let response = await fetch(`http://localhost:3000/user-role/${email}`);
     let roleData = await response.json();
 
     let userRole = roleData?.role?.toLowerCase();
 
-    // 🔹 যদি ইউজার নতুন হয়, ডিফল্ট রোল 'user' হিসেবে সেট করো
     if (!userRole) {
       userRole = "user"; // default role
 
-      // নতুন ইউজারের রোল ডাটাবেসে পোস্ট করা
       await fetch("http://localhost:3000/user-role", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email,
-          role: "User", // ucfirst রাখলে nicer
+          role: "User",
         }),
       });
 
-      // users collection এ ইউজারের info রাখো
       await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,7 +52,7 @@ const handleGoogle = async () => {
       });
     }
 
-    // 🔹 নেভিগেশন
+    
     navigate("/");
     // switch (userRole) {
     //   case "admin":
