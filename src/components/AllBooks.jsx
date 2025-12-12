@@ -67,7 +67,7 @@ const AllBooks = () => {
                   </p>
 
                   {/* Book Details Button */}
-                  <Link to={`/book/${book._id}`}>
+                  <Link to={`/books/${book._id}`}>
                     <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
                       Book Details
                     </button>

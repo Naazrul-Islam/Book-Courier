@@ -9,7 +9,7 @@ const LatestBooks = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/books")
+      .get("http://localhost:3000/books/latest")
       .then((res) => setBooks(res.data))
       .catch((err) => console.error(err));
   }, []);

@@ -15,12 +15,14 @@ import AdminDashboard from "./AdminDashboard";
 import DashboardLayout from "./Layout/DashbordLayout";
 import LibrarianDashboard from "./components/LibrarianDashboard";
 import AllBooks from "./components/AllBooks";
+import BookDetails from "./components/BookDetails";
 
 
 const router = createBrowserRouter([
   // PUBLIC ROUTES
   { path: "/", element: <HomeLayout /> },
   { path: "/books", element: <AllBooks /> },
+  { path: "/books/:id", element: <BookDetails /> },
 
   // AUTH ROUTES
 
