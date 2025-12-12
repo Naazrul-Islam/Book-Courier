@@ -44,6 +44,7 @@ const MyProfile = () => {
             <input
               type="text"
               value={name}
+              defaultValue={user?.displayName}
               onChange={(e) => setName(e.target.value)}
               className="w-full p-2 rounded-md text-black bg-white"
             />
