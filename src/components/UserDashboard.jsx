@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaUser, FaBook, FaClipboardList } from "react-icons/fa";
 import MyProfile from "../page/MyProfile";
+import MyOrders from "./MyOrders";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("My Orders");
@@ -44,6 +45,7 @@ const UserDashboard = () => {
               <h2 className="text-2xl font-bold text-purple-600">My Orders</h2>
               <p className="mt-2 text-gray-700">Here are all your recent orders.</p>
               {/* Add Table or Cards for Orders here */}
+              <MyOrders />
             </div>
           )}
           {activeTab === "My Profile" && (
