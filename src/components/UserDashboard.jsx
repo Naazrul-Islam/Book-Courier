@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaUser, FaBook, FaClipboardList } from "react-icons/fa";
 import MyProfile from "../page/MyProfile";
 import MyOrders from "./MyOrders";
+import PaymentHistory from "./PaymentHistory";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("My Orders");
@@ -60,6 +61,7 @@ const UserDashboard = () => {
               <h2 className="text-2xl font-bold text-blue-600">Invoices</h2>
               <p className="mt-2 text-gray-700">View your payment history.</p>
               {/* Add Invoice Table / Cards here */}
+              <PaymentHistory></PaymentHistory>
             </div>
           )}
         </div>
