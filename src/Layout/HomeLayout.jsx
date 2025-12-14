@@ -7,6 +7,7 @@ import TopWriter from '../components/TopWriter';
 import CoverageMap from '../components/CoverageMap';
 import Navber from '../components/Navber';
 import LatestBooks from '../components/LatestBooks';
+import Footer from '../components/Footer';
 
 
 const HomeLayout = () => {
@@ -17,9 +18,10 @@ const HomeLayout = () => {
             <BannerSlider></BannerSlider>
             <LatestBooks></LatestBooks>
             <HowItWorks></HowItWorks>
-            {/* <TopWriter></TopWriter> */}
+            <TopWriter></TopWriter>
             <CoverageMap></CoverageMap>
             <WhyChoose></WhyChoose>
+            <Footer></Footer>
         </div>
     );
 };

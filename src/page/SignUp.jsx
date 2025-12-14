@@ -29,14 +29,14 @@ const handleGoogle = async () => {
     let userRole = roleData?.role?.toLowerCase();
 
     if (!userRole) {
-      userRole = "user"; // default role
+      userRole = "Admin"; // default role
 
       await fetch("http://localhost:3000/user-role", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email,
-          role: "User",
+          role: "Admin",
         }),
       });
 
@@ -47,7 +47,7 @@ const handleGoogle = async () => {
           email: email,
           name: name,
           photo: photo,
-          role: "User",
+          role: "Admin",
         }),
       });
     }

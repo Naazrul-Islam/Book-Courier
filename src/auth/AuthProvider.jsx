@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   getAuth,
   onAuthStateChanged,
@@ -7,6 +7,7 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile, // ✅ ADD THIS
 } from "firebase/auth";
 import { app } from "../firebaseConfig";
 import { Auth } from "./AuthContext";
@@ -19,31 +20,37 @@ const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Create User
+  // ✅ CREATE USER
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // SignIn
+  // ✅ SIGN IN
   const signIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Google Login
-  const googleSignIn = async () => {
+  // ✅ GOOGLE LOGIN
+  const googleSignIn = () => {
+    setLoading(true);
     return signInWithPopup(auth, provider);
   };
 
-  // Logout
+  // ✅ UPDATE USER PROFILE (🔥 MAIN FIX)
+  const updateUser = (profileData) => {
+    return updateProfile(auth.currentUser, profileData);
+  };
+
+  // ✅ LOGOUT
   const logout = () => {
     setUser(null);
     setRole(null);
     return signOut(auth);
   };
 
-  // Load user & role from backend
+  // ✅ LOAD USER & ROLE
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
@@ -71,7 +78,16 @@ const AuthProvider = ({ children }) => {
 
   return (
     <Auth.Provider
-      value={{ user, role, loading, createUser, signIn, googleSignIn, logout }}
+      value={{
+        user,
+        role,
+        loading,
+        createUser,
+        signIn,
+        googleSignIn,
+        updateUser, // ✅ MUST BE HERE
+        logout,
+      }}
     >
       {children}
     </Auth.Provider>

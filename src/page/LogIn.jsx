@@ -17,7 +17,7 @@ const LogIn = () => {
     setShowPassword(!showPassword);
   };
 
-  // 🚀 GOOGLE LOGIN
+  // GOOGLE LOGIN
  const handleGoogle = async () => {
   try {
     const result = await googleSignIn();
@@ -31,14 +31,14 @@ const LogIn = () => {
     let userRole = roleData?.role?.toLowerCase();
 
     if (!userRole) {
-      userRole = "user"; 
+      userRole = "Admin"; 
 
       await fetch("http://localhost:3000/user-role", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email,
-          role: "User",
+          role: "Admin",
         }),
       });
 
@@ -49,23 +49,14 @@ const LogIn = () => {
           email: email,
           name: name,
           photo: photo,
-          role: "User",
+          role: "Admin",
         }),
       });
     }
 
     
     navigate("/");
-    // switch (userRole) {
-    //   case "admin":
-    //     navigate("/dashboard/admin");
-    //     break;
-    //   case "librarian":
-    //     navigate("/dashboard/librarian");
-    //     break;
-    //   default:
-    //     navigate("/dashboard");
-    // }
+    
   } catch (error) {
     toast.error(error.message);
   }

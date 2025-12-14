@@ -18,15 +18,20 @@ import AllBooks from "./components/AllBooks";
 import BookDetails from "./components/BookDetails";
 import Payment from "./components/Payment";
 import PaymentSuccess from "./components/PaymentSuccess";
+import MyOrders from "./components/MyOrders";
 
 
 const router = createBrowserRouter([
   // PUBLIC ROUTES
   { path: "/", element: <HomeLayout /> },
   { path: "/books", element: <AllBooks /> },
-  { path: "/books/:id", element: <BookDetails /> },
+  { path: "/books/:id", element: <PrivateRoute><BookDetails /></PrivateRoute> },
   { path: "/payment/:orderId", element: <Payment /> },
   { path: "/payment-success", element: <PaymentSuccess /> },
+  { path: "/my-orders", element: <MyOrders /> },
+
+
+
 
 
   // AUTH ROUTES
@@ -37,7 +42,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <LogIn /> },
       { path: "register", element: <SignUp /> },
-      { path: "forget-password", element: <ForgetPassword /> },
+      { path: "forget-password", element: <ForgetPassword /> }
+      ,
     ],
   },
 

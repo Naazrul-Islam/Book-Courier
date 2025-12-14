@@ -38,7 +38,6 @@ const MyOrders = () => {
         status: "cancelled",
       });
 
-      // Update UI instantly
       setOrders((prev) =>
         prev.map((order) =>
           order._id === id ? { ...order, status: "cancelled" } : order
@@ -91,10 +90,20 @@ const MyOrders = () => {
                   </span>
                 </td>
 
+                {/* Payment Column */}
                 <td className="p-3 capitalize">
-                  {order.paymentStatus}
+                  {order.paymentStatus === "paid" ? (
+                    <span className="px-3 py-1 rounded bg-green-600 text-white">
+                      Paid
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 rounded bg-red-600 text-white">
+                      Unpaid
+                    </span>
+                  )}
                 </td>
 
+                {/* Action Column */}
                 <td className="p-3 space-x-3">
                   {/* CANCEL BUTTON */}
                   {order.status === "pending" && (
@@ -107,14 +116,13 @@ const MyOrders = () => {
                   )}
 
                   {/* PAY NOW BUTTON */}
-                  {order.status === "pending" &&
-                    order.paymentStatus === "unpaid" && (
-                      <Link to={`/payment/${order._id}`}>
-                        <button className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
-                          Pay Now
-                        </button>
-                      </Link>
-                    )}
+                  {order.status === "pending" && order.paymentStatus === "unpaid" && (
+                    <Link to={`/payment/${order._id}`}>
+                      <button className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Pay Now
+                      </button>
+                    </Link>
+                  )}
                 </td>
               </tr>
             ))}

@@ -3,6 +3,7 @@ import { FaUser, FaBook, FaClipboardList } from "react-icons/fa";
 import MyProfile from "../page/MyProfile";
 import MyOrders from "./MyOrders";
 import PaymentHistory from "./PaymentHistory";
+import MyWishlist from "./MyWishlist";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("My Orders");
@@ -11,6 +12,7 @@ const UserDashboard = () => {
     { name: "My Orders", icon: <FaClipboardList /> },
     { name: "My Profile", icon: <FaUser /> },
     { name: "Invoices", icon: <FaBook /> },
+    { name: "My Wishlist", icon: <FaBook /> },
   ];
 
   return (
@@ -62,6 +64,12 @@ const UserDashboard = () => {
               <p className="mt-2 text-gray-700">View your payment history.</p>
               {/* Add Invoice Table / Cards here */}
               <PaymentHistory></PaymentHistory>
+            </div>
+          )}
+          {activeTab === "My Wishlist" && (
+            <div>
+              <h2 className="text-2xl font-bold text-green-600">My Wishlist</h2>
+              <MyWishlist />
             </div>
           )}
         </div>

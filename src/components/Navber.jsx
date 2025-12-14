@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom"; // ✅ react-router-dom
 import { MdManageAccounts } from "react-icons/md";
 import { Auth } from "../auth/AuthContext";
+import { FaOpencart } from "react-icons/fa";
 
 const Navber = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -35,7 +36,7 @@ const Navber = () => {
           to={"/"}
           className="btn btn-ghost text-2xl flex items-center gap-2 font-bold"
         >
-          <MdManageAccounts className="text-3xl text-purple-300" />
+          <FaOpencart className="text-3xl text-purple-300" />
           <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">
             BookCourier
           </h1>

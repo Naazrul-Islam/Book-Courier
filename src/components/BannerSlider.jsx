@@ -61,7 +61,7 @@ export default function BannerSlider() {
 
                   {/* BUTTON */}
                   <a
-                    href="/all-books"
+                    href="/books"
                     className="relative px-7 py-3 rounded-xl font-semibold text-white 
                     bg-gradient-to-r from-purple-600 to-pink-600 shadow-xl 
                     overflow-hidden transition-all duration-300 hover:scale-105"

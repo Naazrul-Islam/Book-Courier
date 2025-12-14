@@ -44,7 +44,7 @@ export default function TopWriter() {
           className="text-5xl md:text-6xl font-extrabold mb-6 text-transparent bg-clip-text 
           bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 animate-gradient-move drop-shadow-lg"
         >
-          Featured Writers
+          Our Top Writers
         </h2>
         <p className="text-gray-300 mb-12 text-lg md:text-xl">
           Meet the brilliant minds behind your favorite books.
