@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Auth } from "../auth/AuthContext";
+import Swal from "sweetalert2";
 
 const statusFlow = {
   pending: "shipped",
@@ -12,51 +13,46 @@ const LibrarianOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  // Fetch orders for this librarian
+  const fetchOrders = async () => {
     if (!user?.email) return;
-
-    axios
-      .get(`http://localhost:3000/orders/librarian/${user.email}`)
-      .then((res) => {
-        setOrders(res.data || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [user?.email]);
-
-  // Cancel order
-  const cancelOrder = async (id) => {
-    if (!window.confirm("Cancel this order?")) return;
     try {
-      await axios.patch(`http://localhost:3000/orders/status/${id}`, {
-        status: "cancelled",
-      });
-      setOrders((prev) =>
-        prev.map((o) => (o._id === id ? { ...o, status: "cancelled" } : o))
-      );
-    } catch {
-      alert("Failed to cancel order");
+      const res = await axios.get(`http://localhost:3000/orders/librarian/${user.email}`);
+      setOrders(res.data || []);
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Failed to fetch orders", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Move status forward (pending → shipped → delivered)
-  const moveStatusForward = async (order) => {
-    const nextStatus = statusFlow[order.status];
-    if (!nextStatus) return;
+  useEffect(() => {
+    fetchOrders();
+  }, [user]);
 
+  // Update order status
+  const updateStatus = async (orderId, newStatus) => {
     try {
-      await axios.patch(`http://localhost:3000/orders/status/${order._id}`, {
-        status: nextStatus,
-      });
+      await axios.patch(`http://localhost:3000/orders/status/${orderId}`, { status: newStatus });
+      Swal.fire("Success", `Order is now ${newStatus}`, "success");
+
+      // Update local state instead of refetching
       setOrders((prev) =>
-        prev.map((o) => (o._id === order._id ? { ...o, status: nextStatus } : o))
+        prev.map((order) => (order._id === orderId ? { ...order, status: newStatus } : order))
       );
-    } catch {
-      alert("Failed to update status");
+    } catch (err) {
+      Swal.fire("Error", "Failed to update status", "error");
     }
+  };
+
+  // Cancel an order
+  const cancelOrder = (order) => updateStatus(order._id, "cancelled");
+
+  // Move status forward (pending → shipped → delivered)
+  const moveStatusForward = (order) => {
+    const nextStatus = statusFlow[order.status];
+    if (nextStatus) updateStatus(order._id, nextStatus);
   };
 
   if (loading) return <p className="text-center py-10">Loading...</p>;
@@ -79,51 +75,50 @@ const LibrarianOrders = () => {
           </thead>
 
           <tbody>
+            {orders.length === 0 && (
+              <tr>
+                <td colSpan="6" className="text-center py-8 text-gray-500">
+                  No orders found
+                </td>
+              </tr>
+            )}
+
             {orders.map((order) => (
               <tr key={order._id} className="border-t">
                 <td className="p-3">{order.bookTitle}</td>
                 <td className="p-3">{order.buyerEmail}</td>
-                <td className="p-3">
-                  {new Date(order.orderDate).toLocaleDateString()}
-                </td>
+                <td className="p-3">{new Date(order.orderDate).toLocaleDateString()}</td>
 
                 <td className="p-3">
                   {order.status === "cancelled" ? (
-                    <span className="px-3 py-1 rounded bg-red-600 text-white">
-                      Cancelled
-                    </span>
+                    <span className="px-3 py-1 rounded bg-red-600 text-white">Cancelled</span>
+                  ) : order.status === "delivered" ? (
+                    <span className="px-3 py-1 rounded bg-green-600 text-white">Delivered</span>
                   ) : (
-                    <button
-                      onClick={() => moveStatusForward(order)}
-                      className={`px-3 py-1 rounded ${
-                        order.status === "pending"
-                          ? "bg-yellow-500 text-white"
-                          : order.status === "shipped"
-                          ? "bg-blue-500 text-white"
-                          : "bg-green-600 text-white"
-                      }`}
+                    <select
+                      value={order.status}
+                      onChange={(e) => updateStatus(order._id, e.target.value)}
+                      className="px-3 py-1 rounded bg-blue-100"
                     >
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                    </button>
+                      <option value="pending">Pending</option>
+                      <option value="shipped">Shipped</option>
+                      {order.status === "shipped" && <option value="delivered">Delivered</option>}
+                    </select>
                   )}
                 </td>
 
                 <td className="p-3">
                   {order.paymentStatus === "paid" ? (
-                    <span className="px-3 py-1 rounded bg-green-600 text-white">
-                      Paid
-                    </span>
+                    <span className="px-3 py-1 rounded bg-green-600 text-white">Paid</span>
                   ) : (
-                    <span className="px-3 py-1 rounded bg-red-600 text-white">
-                      Unpaid
-                    </span>
+                    <span className="px-3 py-1 rounded bg-red-600 text-white">Unpaid</span>
                   )}
                 </td>
 
                 <td className="p-3">
                   {order.status === "pending" && (
                     <button
-                      onClick={() => cancelOrder(order._id)}
+                      onClick={() => cancelOrder(order)}
                       className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
                     >
                       Cancel
@@ -132,14 +127,6 @@ const LibrarianOrders = () => {
                 </td>
               </tr>
             ))}
-
-            {orders.length === 0 && (
-              <tr>
-                <td colSpan="6" className="text-center py-8 text-gray-500">
-                  No orders found
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
       </div>
