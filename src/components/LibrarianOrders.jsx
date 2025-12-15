@@ -2,6 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Auth } from "../auth/AuthContext";
 
+const statusFlow = {
+  pending: "shipped",
+  shipped: "delivered",
+};
+
 const LibrarianOrders = () => {
   const { user } = useContext(Auth);
   const [orders, setOrders] = useState([]);
@@ -25,31 +30,29 @@ const LibrarianOrders = () => {
   // Cancel order
   const cancelOrder = async (id) => {
     if (!window.confirm("Cancel this order?")) return;
-
     try {
       await axios.patch(`http://localhost:3000/orders/status/${id}`, {
         status: "cancelled",
       });
-
       setOrders((prev) =>
-        prev.map((o) =>
-          o._id === id ? { ...o, status: "cancelled" } : o
-        )
+        prev.map((o) => (o._id === id ? { ...o, status: "cancelled" } : o))
       );
     } catch {
       alert("Failed to cancel order");
     }
   };
 
-  // Change status
-  const updateStatus = async (id, status) => {
-    try {
-      await axios.patch(`http://localhost:3000/orders/status/${id}`, {
-        status,
-      });
+  // Move status forward (pending → shipped → delivered)
+  const moveStatusForward = async (order) => {
+    const nextStatus = statusFlow[order.status];
+    if (!nextStatus) return;
 
+    try {
+      await axios.patch(`http://localhost:3000/orders/status/${order._id}`, {
+        status: nextStatus,
+      });
       setOrders((prev) =>
-        prev.map((o) => (o._id === id ? { ...o, status } : o))
+        prev.map((o) => (o._id === order._id ? { ...o, status: nextStatus } : o))
       );
     } catch {
       alert("Failed to update status");
@@ -80,33 +83,31 @@ const LibrarianOrders = () => {
               <tr key={order._id} className="border-t">
                 <td className="p-3">{order.bookTitle}</td>
                 <td className="p-3">{order.buyerEmail}</td>
-
                 <td className="p-3">
                   {new Date(order.orderDate).toLocaleDateString()}
                 </td>
 
-                {/* STATUS DROPDOWN */}
                 <td className="p-3">
-                  {order.status !== "cancelled" ? (
-                    <select
-                      value={order.status}
-                      onChange={(e) =>
-                        updateStatus(order._id, e.target.value)
-                      }
-                      className="border rounded px-2 py-1"
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="shipped">Shipped</option>
-                      <option value="delivered">Delivered</option>
-                    </select>
-                  ) : (
+                  {order.status === "cancelled" ? (
                     <span className="px-3 py-1 rounded bg-red-600 text-white">
                       Cancelled
                     </span>
+                  ) : (
+                    <button
+                      onClick={() => moveStatusForward(order)}
+                      className={`px-3 py-1 rounded ${
+                        order.status === "pending"
+                          ? "bg-yellow-500 text-white"
+                          : order.status === "shipped"
+                          ? "bg-blue-500 text-white"
+                          : "bg-green-600 text-white"
+                      }`}
+                    >
+                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                    </button>
                   )}
                 </td>
 
-                {/* PAYMENT */}
                 <td className="p-3">
                   {order.paymentStatus === "paid" ? (
                     <span className="px-3 py-1 rounded bg-green-600 text-white">
@@ -119,7 +120,6 @@ const LibrarianOrders = () => {
                   )}
                 </td>
 
-                {/* ACTION */}
                 <td className="p-3">
                   {order.status === "pending" && (
                     <button
@@ -135,10 +135,7 @@ const LibrarianOrders = () => {
 
             {orders.length === 0 && (
               <tr>
-                <td
-                  colSpan="6"
-                  className="text-center py-8 text-gray-500"
-                >
+                <td colSpan="6" className="text-center py-8 text-gray-500">
                   No orders found
                 </td>
               </tr>
